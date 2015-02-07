@@ -1,0 +1,37 @@
+{
+  "name": "circles",
+  "version": "0.1.0",
+  "description": "Circle user interface library targeted for artificial life simulations.",
+  "keywords": [
+    "canvas",
+    "user interface",
+    "artificial life"
+  ],
+  "homepage": "https://github.com/axelpale/circles",
+  "main": "circles.js",
+  "author": {
+    "name": "Akseli Palen",
+    "email": "akseli.palen@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/axelpale/circles.git"
+  },
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "should": "^4.4.2",
+    "jshint": "latest",
+    "browserify": "latest",
+    "watchify": "^2.2.1",
+    "minifyify": "^5.0.0"
+  },
+  "scripts": {
+    "start": "python -m SimpleHTTPServer",
+    "build": "npm run build:bundle && npm run build:min",
+    "build:bundle": "browserify src/circles.js --standalone circles -o circles.js",
+    "build:watch": "watchify src/circles.js --standalone circles -o circles.js",
+    "build:min": "browserify src/circles.js --standalone circles --debug --plugin [minifyify --map circles.min.js.map --output circles.min.js.map] > circles.min.js",
+    "lint": "jshint src/*.js test/circles.test.js"
+  }
+}
