@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>One | Circles Example</title>
+  <style>
+    body { margin: 0; padding: 0; background: black; }
+  </style>
+</head>
+<body>
+
+  <script src="../circles.js"></script>
+  <script>
+  (function (circles) {
+    var c = circles.create();
+    var c1 = c.createCircle(0, 0, 30, 'white');
+    c1.movePolar(200, -Math.PI / 4); // south east
+    c1.moveTowards(500, 200, 300);
+  }(circles));
+  </script>
+
+</body>
+</html>
