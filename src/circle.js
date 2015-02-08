@@ -13,6 +13,8 @@ var Circle = function (x, y, r, color) {
   this.y = y;
   this.r = r;
   this.color = color;
+
+  this.handlers = {};
 };
 
 Circle.prototype.moveTo = function (x, y) {
@@ -38,6 +40,29 @@ Circle.prototype.moveToward = function (x, y, distance) {
 Circle.prototype.movePolar = function (distance, angle) {
   this.x += distance * Math.cos(angle);
   this.y -= distance * Math.sin(angle); // minus because inverted coords
+};
+
+Circle.prototype.search = function (x, y, r) {
+  // Return
+  //   array of matched objects
+  //   null if nothing found
+  var dx = x - this.x;
+  var dy = y - this.y;
+  var minDistanceWithoutColliding = this.r + r;
+  var m = minDistanceWithoutColliding;
+  if (m * m > dx * dx + dy * dy) {
+    // (x,y) hits
+    return [this];
+  } // else
+  return null;
+};
+
+Circle.prototype.on = function (event, handler) {
+  this.handlers[event] = handler;
+};
+
+Circle.prototype.off = function (event) {
+  delete this.handlers[event];
 };
 
 Circle.prototype.draw = function (ctx) {

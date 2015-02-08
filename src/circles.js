@@ -1,4 +1,7 @@
+var Hammer = require('hammerjs');
+
 var World = require('./world');
+var Group = require('./group');
 var Circle = require('./circle');
 
 
@@ -48,6 +51,13 @@ var Circles = function () {
   // number, unix timestamp milliseconds of most recent frame.
   var past = null;
 
+  // Event handling
+  // see this.on and hammertime.on
+  var handlers = {};
+
+  // 'that' is the call context for background event handlers
+  var that = this;
+
   // Everything is drawn on canvas.
   // Styling is required to make canvas window size.
   var canvas = document.createElement('canvas');
@@ -60,6 +70,29 @@ var Circles = function () {
   canvas.style.height = '100%';
   document.body.appendChild(canvas);
   var ctx = canvas.getContext('2d');
+
+  // Handle input with Hammer.js touch library
+  var hammertime = new Hammer(canvas);
+  hammertime.on('tap', function (event) {
+    var x, y, i, touchedCircles, c;
+    x = event.center.x;
+    y = event.center.y;
+    touchedCircles = world.search(x, y, 0);
+    if (touchedCircles.length > 0) {
+      // Hit at least one circle
+      for (i = 0; i < touchedCircles.length; i += 1) {
+        c = touchedCircles[i];
+        if (c.handlers.hasOwnProperty('tap')) {
+          c.handlers['tap'].call(c, c, x ,y);
+        }
+      }
+    } else {
+      // Hit background
+      if (handlers.hasOwnProperty('tap')) {
+        handlers['tap'].call(that, that, x, y);
+      }
+    }
+  });
 
   // Make canvas resize automatically to full window area
   makeCanvasAutoFullwindow(canvas);
@@ -102,9 +135,30 @@ var Circles = function () {
   // Define here instead prototype to keep private variables private.
 
   this.createCircle = function (x, y, r, color) {
+    // Create circle, add it to the world and return it.
     var c = new Circle(x, y, r, color);
     world.add(c);
     return c;
+  };
+
+  //this.createGroup = function () {
+  //  var g = new Group();
+  //  world.add(g);
+  //  return g;
+  //};
+
+  this.searchInside = function (x, y, r) {
+    // Return
+    //   array of circles colliding with the specified circle.
+    return world.search(x, y, r);
+  };
+
+  // Event handlers
+  this.on = function (event, handler) {
+    handlers[event] = handler;
+  };
+  this.off = function (event) {
+    delete handlers[event];
   };
 
   this.start = startAnimation;
@@ -113,7 +167,7 @@ var Circles = function () {
 };
 
 
-exports.create = function (canvas, options) {
+exports.createWorld = function (canvas, options) {
   return new Circles(canvas, options);
 };
 
@@ -133,4 +187,4 @@ exports.extension = Circles.prototype;
 // *******
 // Version
 // *******
-exports.version = '0.1.0';
+exports.version = '0.2.0';

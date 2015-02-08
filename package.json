@@ -1,6 +1,6 @@
 {
   "name": "circles",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Circle user interface library targeted for artificial life simulations.",
   "keywords": [
     "canvas",
@@ -18,7 +18,9 @@
     "url": "git://github.com/axelpale/circles.git"
   },
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "hammerjs": "^2.0.4"
+  },
   "devDependencies": {
     "should": "^4.4.2",
     "jshint": "latest",

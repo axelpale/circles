@@ -9,13 +9,20 @@
 </head>
 <body>
 
-  <script src="../circles.js"></script>
+  <script src="../circles.min.js"></script>
   <script>
   (function (circles) {
-    var c = circles.create();
-    var c1 = c.createCircle(0, 0, 30, 'white');
+    var world = circles.createWorld();
+    var c1 = world.createCircle(0, 0, 30, 'white');
     c1.movePolar(200, -Math.PI / 4); // south east
-    c1.moveTowards(500, 200, 300);
+    c1.moveToward(500, 200, 300);
+    c1.on('tap', function () {
+      c1.moveBy(10, 10);
+    });
+
+    world.on('tap', function (world, x, y) {
+      world.createCircle(x, y, 20, 'red');
+    });
   }(circles));
   </script>
 
